@@ -8,5 +8,6 @@ header.svelte-37n9hx.svelte-37n9hx{padding:10px 144px;background-color:#000;disp
 div.svelte-15dmtw6{position:relative}video.svelte-15dmtw6{width:100%}.video.svelte-15dmtw6{width:85%;margin:auto}.seeking.svelte-15dmtw6{opacity:0.3}
 .inner.svelte-b3oqht{height:50px;background-color:green;pointer-events:none}.point.svelte-b3oqht{height:50%;width:2px;background-color:#fff ;position:absolute;top:50%;transform:translateY(-50%);z-index:50}.outer.svelte-b3oqht{background-color:#eee;position:relative}
 .time.svelte-ny096z{text-align:center}.centre.svelte-ny096z{width:5px;position:absolute;background-color:rgba(0,0,0,0.2);height:50px;left:50%;top:0;transform:translateX(-50%)}.inner.svelte-ny096z{height:50px;pointer-events:none}.point.svelte-ny096z{height:50%;width:2px;background-color:#fff ;position:absolute;top:50%;z-index:50;transition:transform 0.02 s ease}.outer.svelte-ny096z{background-color:#eee;position:relative;width:50%;margin:auto;margin-bottom:30px}.left.svelte-ny096z{position:absolute;left:0}.right.svelte-ny096z{position:absolute;right:0}
+input.svelte-1uow7xv{display:none;visibility:hidden}
 
 /*# sourceMappingURL=bundle.css.map */
