@@ -13,6 +13,8 @@ Any video format supported by your web browser can be used, MP4 is probably the 
 - Right click: Remove annotaion
 - q: increase speed
 - a: decrease speed
+- left arrow: -1s
+- right arrow: +1s
 
 ## Development
 ```
