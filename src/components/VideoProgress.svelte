@@ -55,7 +55,7 @@
                 return;
             }
 
-            let framesPerPixel = $frames.length/w;
+            let framesPerPixel = $frames.length/1920;
 
             // https://stackoverflow.com/questions/7812514/drawing-a-dot-on-html5-canvas
             function drawPixel (x, y, r, g, b, a) {
@@ -84,7 +84,6 @@
         });
     });
 
-    let w;
 
 </script>
 
@@ -95,7 +94,7 @@
 <div class="play"><PlayButton bind:paused /></div>
 
 
-<div bind:clientWidth={w} class="outer" bind:this={element} on:mouseleave={() => visible=false} on:mouseenter={() => visible=true}>
+<div class="outer" bind:this={element} on:mouseleave={() => visible=false} on:mouseenter={() => visible=true}>
     {#if element && visible}
     <div in:fade="{{duration: 200}}" out:fade="{{duration: 200}}" class="clock" style="left: {$coords.x / element.getBoundingClientRect().width*100}%">
         <span>
