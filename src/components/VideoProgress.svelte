@@ -48,36 +48,39 @@
     let canvas;
   
     onMount(() => {
+        // Render off the main thread
+        let worker = new Worker('/workers/progress.js');
         let ctx = canvas.getContext('2d');
+        let canvasData = ctx.getImageData(0, 0, 4000, 1);
+
+        worker.postMessage({ frames: $frames });
+        worker.addEventListener('message', e => {
+            canvasData = e.data;
+        });
+
+
         requestAnimationFrame(function ticker() {
             if ($video.paused) {
                 requestAnimationFrame(ticker);
                 return;
             }
 
-            let framesPerPixel = $frames.length/1920;
+            worker.postMessage({ frames: $frames });
 
-            // https://stackoverflow.com/questions/7812514/drawing-a-dot-on-html5-canvas
-            function drawPixel (x, y, r, g, b, a) {
-                let index = (x + y * 1920) * 4;
+            // let framesPerPixel = $frames.length/1920;
 
-                canvasData.data[index + 0] = r;
-                canvasData.data[index + 1] = g;
-                canvasData.data[index + 2] = b;
-                canvasData.data[index + 3] = a;
-            }
 
             ctx.clearRect(0, 0, 1920, 1);
-            let canvasData = ctx.getImageData(0, 0, 1920, 1);
+            // let canvasData = ctx.getImageData(0, 0, 1920, 1);
             
-            for (let i=0; i<=1920; ++i) {
-                let frameIndex = Math.round(framesPerPixel*i)
-                let frame = $frames[frameIndex];
-                let hasPosition = (frame != null) && (frame != 'deleted');
-                if (hasPosition) {
-                    drawPixel(i, 0, 255, 255, 255, 255);
-                }
-            }
+            // for (let i=0; i<=1920; ++i) {
+            //     let frameIndex = Math.round(framesPerPixel*i)
+            //     let frame = $frames[frameIndex];
+            //     let hasPosition = (frame != null) && (frame != 'deleted');
+            //     if (hasPosition) {
+            //         drawPixel(i, 0, 255, 255, 255, 255);
+            //     }
+            // }
   
             ctx.putImageData(canvasData, 0, 0);
             requestAnimationFrame(ticker);
@@ -103,7 +106,7 @@
         </div>
     {/if}
     <div class="inner" style="width: {pct*100}%"></div>
-    <canvas bind:this={canvas} height={1} width={1920}></canvas>
+    <canvas bind:this={canvas} height={1} width={4000}></canvas>
 </div>
 
 </div>
