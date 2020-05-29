@@ -49,7 +49,7 @@
   
     onMount(() => {
         // Render off the main thread
-        let worker = new Worker('/workers/progress.js');
+        let worker = new Worker('./workers/progress.js');
         let ctx = canvas.getContext('2d');
         let canvasData = ctx.getImageData(0, 0, 4000, 1);
 
