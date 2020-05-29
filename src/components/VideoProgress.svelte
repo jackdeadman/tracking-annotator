@@ -7,6 +7,7 @@
     import SvelteTooltip from 'svelte-tooltip';
     import { spring } from 'svelte/motion';
     import { fade } from 'svelte/transition';
+    import PlayButton from './PlayButton.svelte';
 
     let coords = spring({ x: 50, y: 50 }, {
 		stiffness: 0.5,
@@ -27,6 +28,7 @@
     let visible = false;
     export let videoElement;
     export let time;
+    export let paused;
 
     async function handleOnclick(e) {
 
@@ -88,15 +90,18 @@
 <svelte:body on:click={handleOnclick}/>
 <svelte:window on:mousemove="{e => coords.set({ x: e.clientX - element.getBoundingClientRect().x, y: e.clientY })}" />
 
-{#if element && visible}
-<div in:fade="{{duration: 200}}" out:fade="{{duration: 200}}" class="clock" style="left: {$coords.x / element.getBoundingClientRect().width*100}%">
-    <span>
-    {format($coords.x / element.getBoundingClientRect().width * $video.duration)}
-    </span>
-    </div>
-{/if}
+<div class="container">
+<div class="play"><PlayButton bind:paused /></div>
+
 
 <div class="outer" bind:this={element} on:mouseleave={() => visible=false} on:mouseenter={() => visible=true}>
+    {#if element && visible}
+    <div in:fade="{{duration: 200}}" out:fade="{{duration: 200}}" class="clock" style="left: {$coords.x / element.getBoundingClientRect().width*100}%">
+        <span>
+        {format($coords.x / element.getBoundingClientRect().width * $video.duration)}
+        </span>
+        </div>
+    {/if}
     <div class="inner" style="width: {pct*100}%"></div>
     <canvas bind:this={canvas} height={1} width={1920}></canvas>
     <!-- {#each points as point (point.index)}
@@ -104,7 +109,14 @@
 	{/each} -->
 </div>
 
+</div>
+
 <style>
+
+    .container {
+        display: flex;
+    }
+
 
     .hidden {
         display: none;
@@ -152,7 +164,7 @@
         background-color: #eee;
         position: relative;
         box-shadow: 0 1px 3px rgba(0,0,0,0.2), 0 1px 2px;
-
+        width: 100%;
     }
 
     canvas {

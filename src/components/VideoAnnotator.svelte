@@ -130,13 +130,14 @@
     .error {
         font-size: 2em;
     }
+
 </style>
 
 <svelte:window on:keydown={handleKeydown}/>
 
 
 <div class="video" class:seeking>
-    <VideoProgress {videoElement} bind:time={time} />
+    <VideoProgress bind:paused {videoElement} bind:time={time} />
     <Annotator container={videoElement} bind:time={time}>
         <video src={$video.src}
             bind:currentTime={time}

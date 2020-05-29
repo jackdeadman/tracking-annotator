@@ -5,6 +5,7 @@
     import { frame2time } from '../functions/frames.js';
     import { spring } from 'svelte/motion';
     import { fade } from 'svelte/transition';
+    import PlayButton from './PlayButton.svelte';
 
     // import { linspace } from '../functions/maths.js';
 
@@ -125,10 +126,13 @@
     <div class="right">+5</div>
 </div>
 
+
+
 <style>
     .time {
         text-align: center;
     }
+
 
     .centre {
         width: 5px;
