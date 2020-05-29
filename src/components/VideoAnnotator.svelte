@@ -106,7 +106,7 @@
         width: 100%;
         /* width: 700px; */
         /* max-width: 100%; */
-        max-width: 1000px;
+        max-width: 1100px;
         margin: 0 30px;
         display: block;
         margin: auto;
