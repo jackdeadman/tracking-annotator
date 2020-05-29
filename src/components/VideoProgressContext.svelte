@@ -3,17 +3,33 @@
     import { frames } from '../stores/annotations.js';
    	import { createEventDispatcher, onMount, tick, onDestroy } from 'svelte';
     import { frame2time } from '../functions/frames.js';
+    import { spring } from 'svelte/motion';
+    import { fade } from 'svelte/transition';
+
     // import { linspace } from '../functions/maths.js';
 
+    let visible = false;
+    let innerElement;
+
+    let coords = spring({ x: 50, y: 50 }, {
+		stiffness: 0.5,
+		damping: 0.95
+    });
     
     function format(seconds) {
-		if (isNaN(seconds)) return '...';
+        if (seconds < 0) return '0:00';
+        if (isNaN(seconds)) return '...';
+        
+        let rem = seconds - parseInt(seconds);
+        rem = (Math.round(rem*100)/100).toString();
+        rem = rem.slice(2)
 
 		const minutes = Math.floor(seconds / 60);
 		seconds = Math.floor(seconds % 60);
-		if (seconds < 10) seconds = '0' + seconds;
+        if (seconds < 10) seconds = '0' + seconds;
+        
 
-		return `${minutes}:${seconds}`;
+		return `${minutes}:${seconds}.${rem}`;
 	}
 
     let element;
@@ -21,6 +37,13 @@
     export let time;
     export let context = 5;
     let lasttime = time;
+
+    function calcTime(x) {
+        let rect = element.getBoundingClientRect();
+        let pct = x / rect.width;
+        let delta = pct*context - (context/2);
+        return videoElement.currentTime + delta;;
+    }
 
     async function handleOnclick(e) {
 
@@ -77,11 +100,21 @@
 </script>
 
 <svelte:body on:click={handleOnclick}/>
+<svelte:window on:mousemove="{e => coords.set({ x: e.clientX - element.getBoundingClientRect().x, y: e.clientY })}" />
 
-<div class="time">{format(time)}</div> 
-<div class="outer" bind:this={element} bind:clientWidth={width}>
-    <div class="inner" style="width: {pct*100}%"></div>
+
+<div class="time">{format(time)}</div>
+
+<div class="outer" bind:this={element} bind:clientWidth={width} on:mouseleave={() => visible=false} on:mouseenter={() => visible=true}>
+    <div bind:this={innerElement} class="inner" style="width: 100%"></div>
     <div class="centre"></div>
+    {#if innerElement && visible}
+    <div in:fade="{{duration: 200}}" out:fade="{{duration: 200}}" class="clock" style="left: {$coords.x / innerElement.getBoundingClientRect().width*100}%">
+        <span>
+        {format(calcTime($coords.x))}
+        </span>
+        </div>
+    {/if}
     {#each points as point (point.index)}
 		<div class="point" style="transform: translate({point.position*width/100}px, -50%)"></div>
 	{/each}
@@ -139,5 +172,17 @@
     .right {
         position: absolute;
         right: 0;
+    }
+
+    .clock {
+        position: absolute;
+        top: 0;
+        z-index: 10000;
+        color: #ccc;
+        background-color:rgba(0,0,0,0.4);
+        height: 50px;
+        width: 10px;
+        box-sizing: border-box;
+        pointer-events: none;
     }
 </style>
