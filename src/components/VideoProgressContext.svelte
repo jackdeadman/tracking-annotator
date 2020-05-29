@@ -16,7 +16,7 @@
 		damping: 0.95
     });
     
-    function format(seconds) {
+    function format(seconds, withRem=false) {
         if (seconds < 0) return '0:00';
         if (isNaN(seconds)) return '...';
         
@@ -28,8 +28,11 @@
 		seconds = Math.floor(seconds % 60);
         if (seconds < 10) seconds = '0' + seconds;
         
-
-		return `${minutes}:${seconds}.${rem}`;
+        if (withRem) {
+            return `${minutes}:${seconds}.${rem}`;
+        } else {
+            return `${minutes}:${seconds}`;
+        }
 	}
 
     let element;
@@ -42,7 +45,7 @@
         let rect = element.getBoundingClientRect();
         let pct = x / rect.width;
         let delta = pct*context - (context/2);
-        return videoElement.currentTime + delta;;
+        return time + delta;;
     }
 
     async function handleOnclick(e) {
@@ -111,7 +114,7 @@
     {#if innerElement && visible}
     <div in:fade="{{duration: 200}}" out:fade="{{duration: 200}}" class="clock" style="left: {$coords.x / innerElement.getBoundingClientRect().width*100}%">
         <span>
-        {format(calcTime($coords.x))}
+        {format(calcTime($coords.x), true)}
         </span>
         </div>
     {/if}

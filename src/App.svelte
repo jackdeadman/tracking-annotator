@@ -32,12 +32,11 @@
 <style>
 	main {
 		margin: 0 auto;
+		user-select: none;
 	}
 
-	video {
-		width: 100%;
-		display: block;
-		margin: auto;
+	.speed {
+		margin-top: 60px;
 	}
 
 

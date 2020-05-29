@@ -95,14 +95,22 @@
 	}
 
 	video {
-        width: 100%;
         box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px;
         background: #fff;
+        margin: auto;
+        width: 100%;
+        /* display: block; */
     }
 
     .video {
-        width: 80%;
-        margin: 30px auto;
+        width: 100%;
+        /* width: 700px; */
+        /* max-width: 100%; */
+        max-width: 1400px;
+        margin: 0 30px;
+        display: block;
+        margin: auto;
+        /* margin: 30px 200px; */
     }
 
     .seeking {
@@ -116,6 +124,7 @@
         font-size: 4em;
         color: #aaa;
         font-style: italic;
+        pointer-events: none;
     }
 
     .error {

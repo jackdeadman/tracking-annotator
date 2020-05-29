@@ -139,10 +139,12 @@
 
 <div class="main" on:mousedown={handleMousedown} on:contextmenu|preventDefault={handleRightClick} on:mouseleave={() => visible=false} on:mouseenter={visible=true}>
     <div class="video">
-        {#if visible}
-            <Cursor {position} {pressed} {container} {scrubbing} />
-        {/if}
-        <div class="inner" bind:this={container}><slot /></div>
+        <div class="inner" bind:this={container}>
+            {#if visible}
+                <Cursor {position} {pressed} {container} {scrubbing} />
+            {/if}
+            <slot />
+        </div>
     </div>
 </div>
 
@@ -150,21 +152,26 @@
 <style>
     .inner {
         position: relative;
+        margin: auto;
+        max-width: 960px;
+        margin: auto;
     }
     
     .main {
         position: relative;
+        margin: 10px 0;
         box-shadow: 0 1px 3px rgba(50,50,50,0.12), 0 1px 2px;
         /* background-color: #fff; */
-        margin: 10px 0;
     }
 
     .video {
         position: relative;
         background-color: #ccc;
-        padding: 100px 350px;
+        /* padding: 100px 350px; */
+        padding: 100px 200px;
         border-top: 10px #aaa solid;
         border-bottom: 10px #aaa solid;
         pointer-events: none;
+        
     }
 </style>

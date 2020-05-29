@@ -25,10 +25,18 @@
     <div out:fade="{{ duration: 100 }}" class="point" style="transform: translate({denormalise(ann).x + 'px'}, {denormalise(ann).y + 'px'})"></div>
 {/if}
 
+<div class="debug">
 {frame}
 {JSON.stringify(ann)}
+</div>
+
 
 <style>
+
+.debug {
+    font-style: italic;
+}
+
 .point {
     height: 10px;
     width: 10px;
@@ -36,6 +44,7 @@
     position: absolute;
     left: 0;
     top: 0;
+    z-index: 1;
     background-color: #000;
     transition: 0.1s ease transform;
     /* transform: translate(-50%, -50%); */
