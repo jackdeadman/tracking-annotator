@@ -1,4 +1,4 @@
-# Video Annotator
+# Tracking Annotator
 ![Screenshot](https://github.com/jackdeadman/tracking-annotator/raw/master/screenshot.png?raw=true")
 
 ## Instructions
