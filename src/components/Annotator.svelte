@@ -94,7 +94,7 @@
                 left: pressed,
                 right: scrubbing
             })
-        }, 25);
+        }, 20);
     }
 
     function handleRightClick() {
@@ -120,7 +120,7 @@
                         left: pressed,
                         right: scrubbing
                     })
-                }, 25);
+                }, 20);
             }
         }
 

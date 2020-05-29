@@ -35,6 +35,7 @@
 
 .debug {
     font-style: italic;
+    font-size: 0.8em;
 }
 
 .point {
