@@ -34,7 +34,7 @@ function createRate() {
 	return {
 		subscribe,
 		increase: () => update((s) => Math.min(s+0.5, 4)),
-		decrease: () => update((s) => Math.max(s-0.5, 1)),
+		decrease: () => update((s) => Math.max(s-0.5, 0)),
 		set
 	};
 }
