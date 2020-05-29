@@ -36,9 +36,7 @@
             let rect = element.getBoundingClientRect();
             let x = e.clientX - rect.left;
             let pct = x / rect.width;
-            console.log('String: ', (pct*$video.duration).toString())
             videoElement.currentTime = (pct*$video.duration).toString();
-            console.log(videoElement.currentTime)
         }
     }
 
@@ -47,28 +45,21 @@
         pct = time / $video.duration;
     }
 
-    let points = []
-    $: {
-        points = $frames.map((frame, index) => ({
-            index, hasPosition: (frame != null ) && (frame != 'deleted')
-    })).filter(({hasPosition}) => hasPosition);
-
-    }
-
-    let ctx;
-    onMount(() => {
-        ctx = canvas.getContext('2d');
-    });
-
-
     let canvas;
-    afterUpdate(() => {
-        if (canvas) {
-            ctx.clearRect(0, 0, 1920, 1);
-            var canvasData = ctx.getImageData(0, 0, 1920, 1);
+  
+    onMount(() => {
+        let ctx = canvas.getContext('2d');
+        requestAnimationFrame(function ticker() {
+            if ($video.paused) {
+                requestAnimationFrame(ticker);
+                return;
+            }
+
+            let framesPerPixel = $frames.length/w;
+
             // https://stackoverflow.com/questions/7812514/drawing-a-dot-on-html5-canvas
             function drawPixel (x, y, r, g, b, a) {
-                var index = (x + y * 1920) * 4;
+                let index = (x + y * 1920) * 4;
 
                 canvasData.data[index + 0] = r;
                 canvasData.data[index + 1] = g;
@@ -76,14 +67,24 @@
                 canvasData.data[index + 3] = a;
             }
 
-            points.forEach(point => {
-                let pct = point.index/$frames.length;
-                let px = Math.round(pct*1920);
-                drawPixel(px, 0, 255, 255, 255, 255);
-            });
+            ctx.clearRect(0, 0, 1920, 1);
+            let canvasData = ctx.getImageData(0, 0, 1920, 1);
+            
+            for (let i=0; i<=1920; ++i) {
+                let frameIndex = Math.round(framesPerPixel*i)
+                let frame = $frames[frameIndex];
+                let hasPosition = (frame != null) && (frame != 'deleted');
+                if (hasPosition) {
+                    drawPixel(i, 0, 255, 255, 255, 255);
+                }
+            }
+  
             ctx.putImageData(canvasData, 0, 0);
-        }
+            requestAnimationFrame(ticker);
+        });
     });
+
+    let w;
 
 </script>
 
@@ -94,7 +95,7 @@
 <div class="play"><PlayButton bind:paused /></div>
 
 
-<div class="outer" bind:this={element} on:mouseleave={() => visible=false} on:mouseenter={() => visible=true}>
+<div bind:clientWidth={w} class="outer" bind:this={element} on:mouseleave={() => visible=false} on:mouseenter={() => visible=true}>
     {#if element && visible}
     <div in:fade="{{duration: 200}}" out:fade="{{duration: 200}}" class="clock" style="left: {$coords.x / element.getBoundingClientRect().width*100}%">
         <span>
@@ -104,9 +105,6 @@
     {/if}
     <div class="inner" style="width: {pct*100}%"></div>
     <canvas bind:this={canvas} height={1} width={1920}></canvas>
-    <!-- {#each points as point (point.index)}
-		<div class="point" style="left: {point.index/$frames.length*100}%"></div>
-	{/each} -->
 </div>
 
 </div>

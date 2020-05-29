@@ -2,7 +2,7 @@
     import { video } from '../stores/video.js';
     import { frames } from '../stores/annotations.js';
    	import { createEventDispatcher, onMount, tick, onDestroy } from 'svelte';
-    import { frame2time } from '../functions/frames.js';
+    import { frame2time, time2frame } from '../functions/frames.js';
     import { spring } from 'svelte/motion';
     import { fade } from 'svelte/transition';
     import PlayButton from './PlayButton.svelte';
@@ -71,17 +71,26 @@
         return ((distance/context)+1/2)*100;
     }
 
-    let ticker;
     let points = [];
 
     onMount(() => {
-        ticker = setInterval(() => {
-
+        // Only render when we have time to.
+        requestAnimationFrame(function ticker() {
             if ($video.paused) {
+                requestAnimationFrame(ticker);
                 return;
             }
 
-            let pts = $frames.map((frame, index) => ({
+            // Get only the frames that could be visible
+            let visibleFrames = [];
+            let start = time2frame((time-(context/2))-1);
+            let end = time2frame((time+(context/2))+1);
+
+            for (let i=0; i<(end-start); ++i) {
+                visibleFrames[i] = [$frames[start+i], start+i];
+            }
+
+            let pts = visibleFrames.map(([frame, index]) => ({
             ...frame,
             index,
             hasPosition: (frame != null ) && (frame != 'deleted'),
@@ -92,12 +101,11 @@
                 position <=100
             ));
             points = pts;
-        }, 20);
+
+            requestAnimationFrame(ticker);
+        });
     });
 
-    onDestroy(() => {
-        clearInterval(ticker);
-    });
 
     let width;
 

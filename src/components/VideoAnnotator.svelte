@@ -19,7 +19,6 @@
 
 
     async function handleKeydown(e) {
-        console.log(document.activeElement)
         if (document.activeElement.nodeName == 'INPUT') {
             return;
         }
@@ -44,9 +43,7 @@
             videoElement.currentTime = time + 1;
         }
 
-
         if (e.key == 'q') {
-            console.log('Increase rate')
             rate.increase();
         }
 
@@ -160,13 +157,4 @@
     </Annotator>
     <div class="speed">{$rate}x</div>
     <VideoProgressContext context={10} {videoElement} bind:time={time} />
-	<!-- <div class="controls" style="opacity: {duration && showControls ? 1 : 0}">
-		<progress value="{(time / duration) || 0}"/>
-
-		<div class="info">
-			<span class="time">{format(time)}</span>
-			<span>click anywhere to {paused ? 'play' : 'pause'} / drag to seek</span>
-			<span class="time">{format(duration)}</span>
-		</div>
-	</div> -->
 </div>
