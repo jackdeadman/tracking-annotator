@@ -1,5 +1,5 @@
-# Tracking Annotator
-![Screenshot](https://github.com/jackdeadman/tracking-annotator/raw/master/screenshot.png?raw=true")
+# Tracking Annotator ([Live Demo]())
+![Screenshot](https://jackdeadman.github.io/tracking-annotator/index.html")
 
 ## Instructions
 Because this tool is a webapplication the videos need to be served over a webserver. The easiest way to do this it to run a static server. See `./serve_videos.sh` as an example. This script mounts a remote drive and starts a server using node (Note: `python -m http.server` has issued with some video!).
