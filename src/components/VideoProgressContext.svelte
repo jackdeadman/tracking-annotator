@@ -57,7 +57,7 @@
             let pts = $frames.map((frame, index) => ({
             ...frame,
             index,
-            hasPosition: frame != null,
+            hasPosition: (frame != null ) && (frame != 'deleted'),
             position: calcLeft(index, time)
             })).filter(({hasPosition, position}) => hasPosition && (
                 // Don't render if outside of element
@@ -85,8 +85,8 @@
     {#each points as point (point.index)}
 		<div class="point" style="transform: translate({point.position*width/100}px, -50%)"></div>
 	{/each}
-    <div class="left">-10</div> 
-    <div class="right">+10</div>
+    <div class="left">-5</div> 
+    <div class="right">+5</div>
 </div>
 
 <style>
@@ -97,7 +97,7 @@
     .centre {
         width: 5px;
         position: absolute;
-        background-color: rgba(0,0,0,0.2);
+        background-color: rgba(255,255,255,0.8);
         height: 50px;
         left: 50%;
         top: 0;
@@ -107,6 +107,7 @@
     .inner {
         height: 50px;
         pointer-events: none;
+        margin: 3px 0;
     }
 
     .point {
@@ -117,14 +118,17 @@
         top: 50%; 
         z-index: 50;
         transition : transform 0.02 s ease;
+        pointer-events: none;
     }
 
     .outer {
-        background-color: #eee;
+        background-color: #222;
         position: relative;
         width: 50%;
         margin: auto;
         margin-bottom: 30px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.2), 0 1px 2px;
+
     }
 
     .left {

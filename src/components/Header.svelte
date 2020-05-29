@@ -2,6 +2,7 @@
     import { video } from '../stores/video.js';
     import DownloadButton from './DownloadButton.svelte';
     import { annotations, frames } from '../stores/annotations.js';
+    import { beforeUpdate, afterUpdate } from 'svelte';
     let focus = true;
 
     function toName(url) {
@@ -19,15 +20,19 @@
     }
 
     function handleKey(e) {
-        e.stopImmediatePropagation();
         if (e.key == 'Enter') {
             e.target.blur();
         }
-
+        console.log(e.key)
         if (e.key == 'Escape') {
             e.target.blur();
         }
     }
+
+    function handleFocus(e) {
+        focus = true;
+    }
+
 </script>
 
 
@@ -40,8 +45,8 @@
     </h1>
     <div class="buttons">
         <div class:focus={focus || ($video.src=='')}>
-            <input on:keypress={handleKey}
-                on:focus={() => focus=true} on:blur={()=> focus=false} placeholder="Location of mp4 file" type="text" value={$video.src} on:input={handleInput}>
+            <input autofocus on:keydown={handleKey}
+                on:focus={handleFocus} on:blur={()=> focus=false} placeholder="Location of mp4 file" type="text" value={$video.src} on:input={handleInput}>
         </div>
         <DownloadButton data={$annotations} filename='log.json'>Download raw input</DownloadButton>
         <DownloadButton data={$frames} filename='labels.json'>Download labels</DownloadButton>
@@ -78,9 +83,10 @@ h1 {
 
 input {
     height: 100%;
-    width: 500px;
+    width: 350px;
     opacity: 0.5;
     transition: 1s position all;
+    cursor: pointer;
 }
 
 .focus input {
@@ -92,6 +98,7 @@ input {
     z-index: 400;
     height: 50px;
     text-size: 3em;
+    cursor: auto;
 }
 
 .blocker {

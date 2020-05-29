@@ -1,4 +1,5 @@
 <script>
+    // TODO: Clean up this component
     import Cursor from './Cursor.svelte';
     import { frames, annotations } from '../stores/annotations.js';
     // import { time } from '../stores/video.js';
@@ -33,7 +34,7 @@
             };
         }
         if (scrubbing) {
-            $frames[time2frame(time)] = null;
+            $frames[time2frame(time)] = 'deleted';
         }
 
         if (pressed || scrubbing) {
@@ -83,7 +84,7 @@
                 };
             }
             if (scrubbing) {
-                $frames[time2frame(time)] = null;
+                $frames[time2frame(time)] = 'deleted';
             }
 
             annotations.add({
@@ -93,7 +94,7 @@
                 left: pressed,
                 right: scrubbing
             })
-        }, 50);
+        }, 20);
     }
 
     function handleRightClick() {
@@ -109,7 +110,7 @@
             if (!ticker) {
                     ticker = setInterval(() => {
                     if (scrubbing) {
-                        $frames[time2frame(time)] = null;
+                        $frames[time2frame(time)] = 'deleted';
                     }
 
                     annotations.add({
@@ -119,7 +120,7 @@
                         left: pressed,
                         right: scrubbing
                     })
-                }, 50);
+                }, 20);
             }
         }
 
@@ -136,22 +137,30 @@
 
 <svelte:window on:keydown={handleKeydown} on:keyup={handleKeyup} on:mousemove={handleMousemove} on:mouseup={handleMouseup}/>
 
-<div on:mousedown={handleMousedown} on:contextmenu|preventDefault={handleRightClick} on:mouseleave={() => visible=false} on:mouseenter={visible=true}>
+<div class="main" on:mousedown={handleMousedown} on:contextmenu|preventDefault={handleRightClick} on:mouseleave={() => visible=false} on:mouseenter={visible=true}>
     <div class="video">
         {#if visible}
             <Cursor {position} {pressed} {container} {scrubbing} />
         {/if}
-        <div bind:this={container}><slot /></div>
+        <div class="inner" bind:this={container}><slot /></div>
     </div>
 </div>
 
 
 <style>
-    div {
+    .inner {
         position: relative;
+    }
+    
+    .main {
+        position: relative;
+        box-shadow: 0 1px 3px rgba(50,50,50,0.12), 0 1px 2px;
+        /* background-color: #fff; */
+        margin: 10px 0;
     }
 
     .video {
+        position: relative;
         background-color: #ccc;
         padding: 100px 350px;
         border-top: 10px #aaa solid;

@@ -1,6 +1,7 @@
 <script>
     import { frames } from '../stores/annotations.js';
     import { time2frame } from '../functions/frames.js';
+    import { fade } from 'svelte/transition';
 
     export let time;
     export let container;
@@ -20,8 +21,8 @@
     $: ann = $frames[time2frame(time)];
 </script>
 
-{#if ann}
-    <div class="point" style="transform: translate({denormalise(ann).x + 'px'}, {denormalise(ann).y + 'px'})"></div>
+{#if ann && (ann !== 'deleted')}
+    <div out:fade="{{ duration: 100 }}" class="point" style="transform: translate({denormalise(ann).x + 'px'}, {denormalise(ann).y + 'px'})"></div>
 {/if}
 
 {frame}

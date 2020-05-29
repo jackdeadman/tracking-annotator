@@ -20,7 +20,7 @@
     }
 
     $: posDenormed = denormalise(position);
-    $: scale = pressed ? 2 : 1;
+    $: scale = pressed ? 1.2 : 1;
 
 </script>
 

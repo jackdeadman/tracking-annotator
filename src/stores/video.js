@@ -3,7 +3,7 @@ import { writable } from 'svelte/store';
 function createVideo() {
 	const { subscribe, set, update } = writable({
         rate: 1,
-        src: 'http://localhost:8080/dev/S02_U02_full.mp4',
+        src: 'https://github.com/intel-iot-devkit/sample-videos/blob/master/people-detection.mp4?raw=true',
         duration: 0
     });
 
@@ -34,7 +34,7 @@ function createRate() {
 	return {
 		subscribe,
 		increase: () => update((s) => Math.min(s+0.5, 4)),
-		deccrease: () => update((s) => Math.max(s-0.5, 0)),
+		decrease: () => update((s) => Math.max(s-0.5, 1)),
 		set
 	};
 }
