@@ -1,4 +1,4 @@
-const resolution = 15;
+const resolution = 10;
 
 export function time2frame(time) {
     return Math.round(time*resolution);

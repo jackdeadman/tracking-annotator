@@ -16,6 +16,7 @@
     "svelte": "^3.0.0"
   },
   "dependencies": {
+    "lodash.debounce": "^4.0.8",
     "sirv-cli": "^0.4.4",
     "svelte-tooltip": "^1.2.0"
   }

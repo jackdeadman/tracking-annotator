@@ -11,3 +11,20 @@ export function download(filename, text) {
   
     document.body.removeChild(element);
 }
+
+
+// Alternative to setInterval, this will not queue up the intervals
+// this prevents a build up.
+export function interval(fn, time) {
+    fn();
+    let current = setTimeout(function timeout() {
+        fn();
+        current = setTimeout(timeout, time)
+    }, time);
+    
+    return {
+        clear() {
+            clearInterval(current);
+        }
+    }
+}

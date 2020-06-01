@@ -4,6 +4,7 @@
     import { frames, annotations } from '../stores/annotations.js';
     // import { time } from '../stores/video.js';
     import { time2frame } from '../functions/frames.js';
+    import { interval } from '../functions/utils.js';
 
     let position;
     export let container;
@@ -59,7 +60,10 @@
             x: e.clientX,
             y: e.clientY
         });
-        clearInterval(ticker);
+
+        if (ticker) {
+            ticker.clear();
+        }
         ticker = null;
         scrubbing = false;
     }
@@ -77,7 +81,7 @@
             scrubbing = true;
         }
 
-        ticker = setInterval(() => {
+        ticker = interval(() => {
             if (pressed) {
                 $frames[time2frame(time)] = {
                     ...position, track, time
@@ -102,13 +106,12 @@
     }
 
     function handleKeydown(e) {
-        console.log(e.key)
         if (e.key === 'Backspace') {
             scrubbing = true;
             pressed = false;
 
             if (!ticker) {
-                    ticker = setInterval(() => {
+                    ticker = interval(() => {
                     if (scrubbing) {
                         $frames[time2frame(time)] = 'deleted';
                     }
@@ -129,7 +132,7 @@
     function handleKeyup(e) {
         if (e.key === 'Backspace') {
             scrubbing = false;
-            clearInterval(ticker);
+            ticker.clear();
             ticker = null;
         }
     }

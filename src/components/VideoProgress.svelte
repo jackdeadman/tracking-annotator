@@ -8,6 +8,16 @@
     import { spring } from 'svelte/motion';
     import { fade } from 'svelte/transition';
     import PlayButton from './PlayButton.svelte';
+    import debounce from 'lodash.debounce';
+
+    function drawPixel (canvasData, x, y, r, g, b, a) {
+        let index = (x + y * 4000) * 4;
+
+        canvasData.data[index + 0] = r;
+        canvasData.data[index + 1] = g;
+        canvasData.data[index + 2] = b;
+        canvasData.data[index + 3] = a;
+    }
 
     let coords = spring({ x: 50, y: 50 }, {
 		stiffness: 0.5,
@@ -25,6 +35,7 @@
 	}
 
     let element;
+    let inner;
     let visible = false;
     export let videoElement;
     export let time;
@@ -40,24 +51,14 @@
         }
     }
 
-    let pct = 0;
-    $: if ($video.duration) {
-        pct = time / $video.duration;
-    }
-
+    // let pct = 0;
+    // $: pct = debounce(() => time / $video.duration, 300);
     let canvas;
   
     onMount(() => {
-        // Render off the main thread
-        let worker = new Worker('./workers/progress.js');
+        const width = 1920;
         let ctx = canvas.getContext('2d');
-        let canvasData = ctx.getImageData(0, 0, 4000, 1);
-
-        worker.postMessage({ frames: $frames });
-        worker.addEventListener('message', e => {
-            canvasData = e.data;
-        });
-
+        let canvasData = ctx.getImageData(0, 0, width, 1);
 
         requestAnimationFrame(function ticker() {
             if ($video.paused) {
@@ -65,22 +66,23 @@
                 return;
             }
 
-            worker.postMessage({ frames: $frames });
+            let pct = time / $video.duration
+            inner.style.width = pct*100 + "%";
 
-            // let framesPerPixel = $frames.length/1920;
+            let framesPerPixel = $frames.length/1920;
 
 
-            ctx.clearRect(0, 0, 1920, 1);
-            // let canvasData = ctx.getImageData(0, 0, 1920, 1);
+            ctx.clearRect(0, 0, width, 1);
+            let canvasData = ctx.getImageData(0, 0, width, 1);
             
-            // for (let i=0; i<=1920; ++i) {
-            //     let frameIndex = Math.round(framesPerPixel*i)
-            //     let frame = $frames[frameIndex];
-            //     let hasPosition = (frame != null) && (frame != 'deleted');
-            //     if (hasPosition) {
-            //         drawPixel(i, 0, 255, 255, 255, 255);
-            //     }
-            // }
+            for (let i=0; i<=1920; ++i) {
+                let frameIndex = Math.round(framesPerPixel*i)
+                let frame = $frames[frameIndex];
+                let hasPosition = (frame != null) && (frame != 'deleted');
+                if (hasPosition) {
+                    drawPixel(canvasData, i, 0, 255, 255, 255, 255);
+                }
+            }
   
             ctx.putImageData(canvasData, 0, 0);
             requestAnimationFrame(ticker);
@@ -105,8 +107,8 @@
         </span>
         </div>
     {/if}
-    <div class="inner" style="width: {pct*100}%"></div>
-    <canvas bind:this={canvas} height={1} width={4000}></canvas>
+    <div bind:this={inner} class="inner"></div>
+    <canvas bind:this={canvas} height={1} width={1920}></canvas>
 </div>
 
 </div>
