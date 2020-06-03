@@ -3,8 +3,8 @@ import { writable } from 'svelte/store';
 function createVideo() {
 	const { subscribe, set, update } = writable({
         rate: 1,
-		src: 'https://github.com/intel-iot-devkit/sample-videos/blob/master/people-detection.mp4?raw=true',
-		//src: 'http://localhost:8080/S02_U02_full.mp4',
+		// src: 'https://github.com/intel-iot-devkit/sample-videos/blob/master/people-detection.mp4?raw=true',
+		src: 'http://localhost:8080/S02_U02_full.mp4',
         duration: 0
     });
 

@@ -5,6 +5,7 @@
     import VideoProgress from './VideoProgress.svelte';
     import VideoProgressContext from './VideoProgressContext.svelte';
     import AnnotationVideoViewer from './AnnotationVideoViewer.svelte';
+    import OpticalFlow from './OpticalFlow.svelte';
     import { time2frame } from '../functions/frames.js';
     import { tick, onMount } from 'svelte';
     import { tweened } from 'svelte/motion';
@@ -131,12 +132,14 @@
 </style>
 
 <svelte:window on:keydown={handleKeydown}/>
+<OpticalFlow {videoElement} points={[]} {loaded} {time} />
 
 
 <div class="video" class:seeking>
     <VideoProgress bind:paused {videoElement} bind:time={time} />
     <Annotator container={videoElement} bind:time={time}>
         <video src={$video.src}
+            crossorigin="anonymous"
             bind:currentTime={time}
             bind:duration
             bind:this={videoElement}
