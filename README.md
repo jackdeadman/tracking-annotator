@@ -17,6 +17,7 @@ Any video format supported by your web browser can be used, MP4 is probably the 
 - a: decrease speed
 - left arrow: -1s
 - right arrow: +1s
+- middle click: Add optical flow point to automatically track
 
 ## Development
 ```
