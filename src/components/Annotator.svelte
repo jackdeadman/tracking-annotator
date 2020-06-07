@@ -8,10 +8,12 @@
 
     let position;
     export let container;
+    export let points;
     let pressed;
     let scrubbing = false;
     let visible;
     let track = 0;
+    let usingFlow = false;
     export let time;
 
 
@@ -66,35 +68,66 @@
         }
         ticker = null;
         scrubbing = false;
+
+        if (usingFlow) {
+            // Currently only support one flow point.
+            points = [position];
+        }
     }
 
     function handleMousedown(e) {
+        points = [];
+        /**
+         * TODO: State should probably be an enum
+        */
+
+        if (e.buttons == 4) {
+            track += 1;
+            pressed = false;
+            scrubbing = false;
+            usingFlow = true;
+        }
 
         if (e.buttons == 1) {
             pressed = true;
             scrubbing = false;
+            usingFlow = false;
             track += 1;
         }
 
         if (e.buttons == 2) {
             pressed = false;
+            usingFlow = false;
             scrubbing = true;
         }
 
-        ticker = interval(() => {
+        if (ticker) {
+            ticker.clear();
+        }
+
+        ticker = interval(function fn() {
             if (pressed) {
                 $frames[time2frame(time)] = {
                     ...position, track, time
                 };
             }
+
+            if (usingFlow) {
+                $frames[time2frame(time)] = {
+                    ...position, track: 'Flow', time
+                };
+            }
+
+
             if (scrubbing) {
                 $frames[time2frame(time)] = 'deleted';
             }
 
+
             annotations.add({
                 ...position,
                 time: time,
-                track,
+                track: usingFlow ? 'Flow' : track,
                 left: pressed,
                 right: scrubbing
             })

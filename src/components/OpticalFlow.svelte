@@ -5,16 +5,54 @@
     let canvasHeight;
     let canvasWidth;
     let canvas;
+    export let paused;
 
     export let loaded;
     export let videoElement;
     export let time;
+    export let points;
+
+    let renderedPoint;
+
+    $: console.log('Points: ', points)
+
+    let gui,options,ctx;
+    let curr_img_pyr, prev_img_pyr, point_count, point_status, prev_xy, curr_xy;
+
+    $: {
+        console.log('Changed')
+        console.log(points[0], renderedPoint)
+        if (points[0] != renderedPoint) {
+    
+            curr_img_pyr = new jsfeat.pyramid_t(3);
+            prev_img_pyr = new jsfeat.pyramid_t(3);
+            curr_img_pyr.allocate(960, 540, jsfeat.U8_t|jsfeat.C1_t);
+            prev_img_pyr.allocate(960, 540, jsfeat.U8_t|jsfeat.C1_t);
+
+            point_count = 0;
+            point_status = new Uint8Array(100);
+            prev_xy = new Float32Array(100*2);
+            curr_xy = new Float32Array(100*2);
+
+            if (points[0]) {
+                let coords = {
+                    x: points[0].x * canvasWidth,
+                    y: points[0].y * canvasHeight
+                }
+
+                if(coords.x > 0 & coords.y > 0 & coords.x < canvasWidth & coords.y < canvasHeight) {
+                    curr_xy[point_count<<1] = coords.x;
+                    curr_xy[(point_count<<1)+1] = coords.y;
+                    point_count = 1;
+                } else {
+                    point_count = 0;
+                }
+            }
+        }
+    }
 
     function run() {
 
-
-    var gui,options,ctx,canvasWidth,canvasHeight;
-    var curr_img_pyr, prev_img_pyr, point_count, point_status, prev_xy, curr_xy;
 
     var demo_opt = function(){
         this.win_size = 20;
@@ -47,6 +85,13 @@
 
     function tick() {
         requestAnimationFrame(tick);
+        let noFeatures = point_count == 0;
+
+        if (paused || noFeatures) {
+            return;
+        }
+
+        renderedPoint = points[0];
 
         if (video.readyState === video.HAVE_ENOUGH_DATA) {
             var vRatio = (canvasHeight / 1080) * 1920;
@@ -64,24 +109,22 @@
             jsfeat.imgproc.grayscale(imageData.data, 960, 540, curr_img_pyr.data[0]);
 
             curr_img_pyr.build(curr_img_pyr.data[0], true);
-
             jsfeat.optical_flow_lk.track(prev_img_pyr, curr_img_pyr, prev_xy, curr_xy, point_count, options.win_size|0, options.max_iterations|0, point_status, options.epsilon, options.min_eigen);
-
 
             prune_oflow_points(ctx);
 
         }
     }
 
-    function on_canvas_click(e) {
-        var coords = canvas.relMouseCoords(e);
-        if(coords.x > 0 & coords.y > 0 & coords.x < canvasWidth & coords.y < canvasHeight) {
-            curr_xy[point_count<<1] = coords.x;
-            curr_xy[(point_count<<1)+1] = coords.y;
-            point_count++;
-        }
-    }
-    canvas.addEventListener('click', on_canvas_click, false);
+    // function on_canvas_click(e) {
+    //     var coords = canvas.relMouseCoords(e);
+    //     if(coords.x > 0 & coords.y > 0 & coords.x < canvasWidth & coords.y < canvasHeight) {
+    //         curr_xy[point_count<<1] = coords.x;
+    //         curr_xy[(point_count<<1)+1] = coords.y;
+    //         point_count++;
+    //     }
+    // }
+    // canvas.addEventListener('click', on_canvas_click, false);
 
     function draw_circle(ctx, x, y) {
         ctx.beginPath();
@@ -110,7 +153,9 @@
                 ++j;
             }
         }
-        point_count = j;
+        if (point_count == 0) {
+            points = [];
+        }
     }
 
     function relMouseCoords(event) {
@@ -154,7 +199,6 @@
 
     }
 
-    let ctx;
     $: if (loaded) {
         ctx = canvas.getContext('2d');
         run();
@@ -171,6 +215,7 @@
 
 
 <style>canvas {
+    display: none;
     width: 960px;
     height: 540px;
 }</style>

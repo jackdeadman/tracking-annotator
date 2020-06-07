@@ -17,6 +17,7 @@
     let videoElement;
     let time = 0;
     let seeking = false;
+    let points = [];
 
 
     async function handleKeydown(e) {
@@ -132,12 +133,12 @@
 </style>
 
 <svelte:window on:keydown={handleKeydown}/>
-<OpticalFlow {videoElement} points={[]} {loaded} {time} />
+<OpticalFlow {videoElement} bind:points {loaded} {time} {paused} />
 
 
 <div class="video" class:seeking>
     <VideoProgress bind:paused {videoElement} bind:time={time} />
-    <Annotator container={videoElement} bind:time={time}>
+    <Annotator bind:points={points} container={videoElement} bind:time={time}>
         <video src={$video.src}
             crossorigin="anonymous"
             bind:currentTime={time}

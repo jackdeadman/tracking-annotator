@@ -46,7 +46,7 @@
     left: 0;
     top: 0;
     z-index: 1;
-    background-color: #000;
+    background-color: #fff;
     transition: 0.1s ease transform;
     /* transform: translate(-50%, -50%); */
 }
