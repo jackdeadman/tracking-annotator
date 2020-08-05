@@ -40,4 +40,4 @@ If you find this tool useful for your research please cite the following paper:
 }
 ```
 
-The paper has been accepted for Interspeech2020 and will be presented in October. [Preprint](https://drive.google.com/drive/folders/1p9wDjK3t5l_4B7SG929LRTybD83xX0sI)
+The paper has been accepted for Interspeech2020 and will be presented in October. [Preprint](https://drive.google.com/file/d/13UFVDuFSXBJxAwwGYUGr5WdWspUy_RVf/view?usp=sharing)
