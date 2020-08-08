@@ -4,7 +4,7 @@
 ## Instructions
 You can use the tool without installing it locally by using the ([Live Demo](https://jackdeadman.github.io/tracking-annotator/index.html)).
 
-Because this tool is a web application the videos need to be served over a webserver. The easiest way to do this it to run a static server. See `./serve_videos.sh` as an example. This script mounts a remote drive and starts a server using node (Note: `python -m http.server` has issued with some videos!). The server hosting the videos must enable cross-origin resource sharing (CORS) e.g., `npx http-server --cors`.
+Because this tool is a web application the videos need to be served over a webserver. The easiest way to do this it to run a static server. See `./serve_videos.sh` as an example. This script mounts a remote drive and starts a server using node (Note: `python -m http.server` has issues with some videos!). The server hosting the videos must enable cross-origin resource sharing (CORS) e.g., `npx http-server --cors`.
 
 Any video format supported by your web browser can be used, MP4 is probably the best choice.
 
