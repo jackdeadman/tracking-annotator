@@ -32,11 +32,14 @@ npm run dev
 ## Citation
 If you find this tool useful for your research please cite the following paper:
 ```
-@inproceedings{Deadman-Barker_2020,  
-  author = {Deadman, Jack and Barker, Jon},
-  title = {{Simulating realistically-spatialised simultaneous speech using video-driven speaker detection and the CHiME-5 dataset}},  
-  year = 2020,  
-  booktitle = {Proceedings of the 21st Annual Conference of the International Speech Communication Association (INTERSPEECH 2020)}  
+@inproceedings{Deadman2020,
+  author={Jack Deadman and Jon Barker},
+  title={{Simulating Realistically-Spatialised Simultaneous Speech Using Video-Driven Speaker Detection and the CHiME-5 Dataset}},
+  year=2020,
+  booktitle={Proc. Interspeech 2020},
+  pages={349--353},
+  doi={10.21437/Interspeech.2020-2807},
+  url={http://dx.doi.org/10.21437/Interspeech.2020-2807}
 }
 ```
 
