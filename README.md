@@ -42,5 +42,3 @@ If you find this tool useful for your research please cite the following paper:
   url={http://dx.doi.org/10.21437/Interspeech.2020-2807}
 }
 ```
-
-The paper has been accepted for Interspeech2020 and will be presented in October. [Preprint](https://drive.google.com/file/d/13UFVDuFSXBJxAwwGYUGr5WdWspUy_RVf/view?usp=sharing)
